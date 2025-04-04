@@ -1,0 +1,76 @@
+Given a matrix mat[][] of dimension n * m where each cell in the matrix
+can have values 0, 1 or 2 which has the following meaning:
+0 : Empty cell
+1 : Cell have fresh oranges
+2 : Cell have rotten oranges
+
+We have to determine what is the earliest time after which all the oranges are rotten. 
+A rotten orange at index (i, j) can rot other fresh orange at indexes (i-1, j), (i+1, j), (i, j-1), (i, j+1)
+(up, down, left and right) in a unit time.
+
+Note: Your task is to return the minimum time to rot all the fresh oranges. If not possible returns -1.
+
+import java.util.*;
+
+public class RottenOranges {
+    public static int orangesRotting(int[][] mat) {
+        int n = mat.length; // Number of rows
+        int m = mat[0].length; // Number of columns
+        
+        // Queue to perform BFS
+        Queue<int[]> queue = new LinkedList<>();
+        int freshOranges = 0; // Count of fresh oranges
+        
+        // Initialize the queue with all rotten oranges
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                if (mat[i][j] == 2) {
+                    queue.add(new int[] {i, j});
+                } else if (mat[i][j] == 1) {
+                    freshOranges++;
+                }
+            }
+        }
+
+        // Directions for top, bottom, left, right
+        int[][] directions = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
+        int time = 0;
+
+        // Perform BFS to rot all fresh oranges
+        while (!queue.isEmpty() && freshOranges > 0) {
+            int size = queue.size();
+            for (int k = 0; k < size; k++) {
+                int[] current = queue.poll();
+                int x = current[0], y = current[1];
+                
+                // Process all neighbors
+                for (int[] dir : directions) {
+                    int newX = x + dir[0];
+                    int newY = y + dir[1];
+                    
+                    // Check if the neighbor is a fresh orange
+                    if (newX >= 0 && newX < n && newY >= 0 && newY < m && mat[newX][newY] == 1) {
+                        mat[newX][newY] = 2; // Rot the fresh orange
+                        queue.add(new int[] {newX, newY});
+                        freshOranges--; // Decrease fresh orange count
+                    }
+                }
+            }
+            time++; // Increase the time for each level of BFS
+        }
+        
+        // If there are still fresh oranges left, return -1
+        return (freshOranges == 0) ? time : -1;
+    }
+
+    public static void main(String[] args) {
+        int[][] mat = {
+            {2, 1, 1},
+            {1, 1, 0},
+            {0, 1, 1}
+        };
+
+        int result = orangesRotting(mat);
+        System.out.println("Minimum time to rot all oranges: " + result); // Output: 4
+    }
+}
