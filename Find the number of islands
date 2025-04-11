@@ -1,1 +1,63 @@
+Given a grid of size n*m (n is the number of rows and m is the 
+number of columns in the grid) consisting of 'W's (Water) and 'L's (Land). Find the number of islands.
+
+Note: An island is either surrounded by water or the boundary of a grid and 
+is formed by connecting adjacent lands horizontally or vertically or diagonally i.e., in all 8 directions.
+
+=================================================================================================================
+public class NumberOfIslands {
+    // Function to count the number of islands
+    public static int numIslands(char[][] grid) {
+        int n = grid.length;    // Number of rows
+        int m = grid[0].length; // Number of columns
+        int count = 0;          // Island count
+
+        boolean[][] visited = new boolean[n][m]; // Visited array to track cells
+
+        // Traverse through every cell in the grid
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                // If the cell is land ('L') and hasn't been visited yet
+                if (grid[i][j] == 'L' && !visited[i][j]) {
+                    // Perform DFS to mark the entire island
+                    dfs(grid, visited, i, j, n, m);
+                    count++; // Increase the island count
+                }
+            }
+        }
+
+        return count; // Return the total number of islands
+    }
+
+    // DFS function to explore the island and mark visited cells
+    private static void dfs(char[][] grid, boolean[][] visited, int i, int j, int n, int m) {
+        // If the current cell is out of bounds, water ('W'), or already visited, return
+        if (i < 0 || j < 0 || i >= n || j >= m || grid[i][j] == 'W' || visited[i][j]) {
+            return;
+        }
+
+        visited[i][j] = true; // Mark the cell as visited
+
+        // Explore all 8 directions (up, down, left, right, diagonals)
+        int[] rowDir = {-1, -1, -1, 0, 0, 1, 1, 1};
+        int[] colDir = {-1, 0, 1, -1, 1, -1, 0, 1};
+        for (int k = 0; k < 8; k++) {
+            dfs(grid, visited, i + rowDir[k], j + colDir[k], n, m);
+        }
+    }
+
+    public static void main(String[] args) {
+        // Example grid (Input)
+        char[][] grid = {
+            {'L', 'W', 'L', 'L'},
+            {'L', 'L', 'W', 'W'},
+            {'W', 'W', 'L', 'W'},
+            {'W', 'L', 'W', 'L'}
+        };
+
+        // Find and print the number of islands
+        int numberOfIslands = numIslands(grid);
+        System.out.println("Number of islands: " + numberOfIslands); // Output: 4
+    }
+}
 
