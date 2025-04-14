@@ -1,0 +1,78 @@
+
+Given a Directed Graph with V vertices (Numbered from 0 to V-1) and E edges,
+check whether it contains any cycle or not. 
+The graph is represented as a 2D vector edges[][], where each entry edges[i] = [u, v] 
+denotes an edge from verticex u to v. in java
+
+
+==================================================================================
+
+import java.util.*;
+
+public class DirectedGraphCycleDetection {
+    public static boolean isCyclic(int V, List<List<Integer>> edges) {
+        // Create adjacency list representation of the graph
+        List<List<Integer>> adj = new ArrayList<>();
+        for (int i = 0; i < V; i++) {
+            adj.add(new ArrayList<>());
+        }
+        for (List<Integer> edge : edges) {
+            adj.get(edge.get(0)).add(edge.get(1));
+        }
+
+        // Arrays to track visited vertices and recursion stack
+        boolean[] visited = new boolean[V];
+        boolean[] recStack = new boolean[V];
+
+        // Traverse each vertex
+        for (int i = 0; i < V; i++) {
+            if (detectCycleDFS(i, adj, visited, recStack)) {
+                return true; // Cycle detected
+            }
+        }
+        return false; // No cycle detected
+    }
+
+    private static boolean detectCycleDFS(int node, List<List<Integer>> adj, boolean[] visited, boolean[] recStack) {
+        // If node is already in the recursion stack, there's a cycle
+        if (recStack[node]) {
+            return true;
+        }
+
+        // If node is already visited, skip processing
+        if (visited[node]) {
+            return false;
+        }
+
+        // Mark the node as visited and add to the recursion stack
+        visited[node] = true;
+        recStack[node] = true;
+
+        // Explore neighbors
+        for (int neighbor : adj.get(node)) {
+            if (detectCycleDFS(neighbor, adj, visited, recStack)) {
+                return true; // Cycle found
+            }
+        }
+
+        // Remove the node from the recursion stack before returning
+        recStack[node] = false;
+        return false;
+    }
+
+    public static void main(String[] args) {
+        int V = 4; // Number of vertices
+        List<List<Integer>> edges = Arrays.asList(
+            Arrays.asList(0, 1), 
+            Arrays.asList(1, 2), 
+            Arrays.asList(2, 3), 
+            Arrays.asList(3, 1) // Cycle exists
+        );
+
+        if (isCyclic(V, edges)) {
+            System.out.println("Graph contains a cycle.");
+        } else {
+            System.out.println("Graph does not contain a cycle.");
+        }
+    }
+}
