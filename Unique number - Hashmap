@@ -1,0 +1,49 @@
+Given an array arr[] containing 2*n + 2 positive numbers, out of which 2*n numbers exist in pairs 
+whereas only two number occur exactly once and are distinct. Find the other two numbers.
+Return the answer in increasing order.
+
+Examples:
+
+Input: arr[] = [1, 2, 3, 2, 1, 4]
+Output: [3, 4] 
+Explanation: 3 and 4 occur exactly once.
+
+
+======================================================================================================================================
+
+
+
+import java.util.HashMap;
+import java.util.Arrays;
+
+public class FindTwoDistinctNumbersHashing {
+    public static int[] findTwoNumbers(int[] arr) {
+        HashMap<Integer, Integer> frequencyMap = new HashMap<>();
+
+        // Count the occurrences of each number
+        for (int num : arr) {
+            frequencyMap.put(num, frequencyMap.getOrDefault(num, 0) + 1);
+        }
+
+        // Find the two numbers with frequency 1
+        int[] result = new int[2];
+        int index = 0;
+
+        for (int num : frequencyMap.keySet()) {
+            if (frequencyMap.get(num) == 1) {
+                result[index++] = num;
+                if (index == 2) break; // Stop once both numbers are found
+            }
+        }
+
+        // Return the two numbers in increasing order
+        Arrays.sort(result);
+        return result;
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {4, 2, 4, 6, 2, 7}; // Example array
+        int[] result = findTwoNumbers(arr);
+        System.out.println("The two distinct numbers are: " + Arrays.toString(result)); // Output: [6, 7]
+    }
+}
