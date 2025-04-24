@@ -1,0 +1,30 @@
+You are given an array arr[] of size n - 1 that contains distinct integers in the range from 1 to n (inclusive). 
+This array represents a permutation of the integers from 1 to n
+with one element missing. Your task is to identify and return the missing element.
+
+
+
+====================================================================================================================================================
+
+
+public class MissingElement {
+    public static int findMissingElement(int[] arr, int n) {
+        // Calculate the sum of integers from 1 to n using the formula
+        int totalSum = n * (n + 1) / 2;
+
+        // Calculate the sum of elements in the given array
+        int arraySum = 0;
+        for (int num : arr) {
+            arraySum += num;
+        }
+
+        // The missing element is the difference between the total sum and the array sum
+        return totalSum - arraySum;
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {1, 2, 4, 5, 6}; // Example array
+        int n = 6; // Range of integers from 1 to n
+        System.out.println("Missing Element: " + findMissingElement(arr, n)); // Output: 3
+    }
+}
