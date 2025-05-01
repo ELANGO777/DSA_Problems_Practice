@@ -1,0 +1,47 @@
+public class MaxSubarraySumOptimized {
+    public static void findMaxSubarray(int[] nums) {
+        int maxSum = Integer.MIN_VALUE; // Track maximum sum
+        int currentSum = 0;             // Track ongoing sum
+
+        // Track indices for the maximum sum subarray
+        int start = 0, end = 0, tempStart = 0;
+
+        for (int i = 0; i < nums.length; i++) {
+            currentSum += nums[i];
+
+            // Update maxSum and subarray boundaries if a new maximum is found
+            if (currentSum > maxSum) {
+                maxSum = currentSum;
+                start = tempStart;
+                end = i;
+            }
+
+            // Reset currentSum if it becomes negative
+            if (currentSum < 0) {
+                currentSum = 0;
+                tempStart = i + 1; // Move tempStart to the next index
+            }
+        }
+
+        // Print results directly
+        System.out.println("Maximum Sum: " + maxSum);
+        System.out.print("Maximum Sum Subarray: ");
+        for (int i = start; i <= end; i++) {
+            System.out.print(nums[i] + " ");
+        }
+    }
+
+    public static void main(String[] args) {
+        int[] nums = {-2, 1, -3, 4, -1, 2, 1, -5, 4}; // Example array
+        findMaxSubarray(nums);
+    }
+}
+
+
+OUTPUT
+=======
+
+[4, -1, 2, 1] provides the maximum sum: 4 + (-1) + 2 + 1 = 6.
+
+Output
+Maximum Sum Subarray: [4, -1, 2, 1]
