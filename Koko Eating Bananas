@@ -1,0 +1,62 @@
+
+
+Koko is given an array arr[], where each element represents a pile of bananas. She has exactly k hours to eat all the bananas.
+
+Each hour, Koko can choose one pile and eat up to s bananas from it.
+
+If the pile has atleast s bananas, she eats exactly s bananas.
+
+If the pile has fewer than s bananas, she eats the entire pile in that hour.
+
+Koko can only eat from one pile per hour.
+
+
+Your task is to find the minimum value of s (bananas per hour) such that Koko can finish all the piles within k hours.
+
+
+
+
+
+
+=======================================================================================================
+
+
+
+
+
+
+
+public class KokoEatingBananas {
+    public static int minEatingSpeed(int[] piles, int h) {
+        int left = 1, right = getMax(piles); // Speed range
+        while (left < right) {
+            int mid = left + (right - left) / 2;
+            if (canEatAll(piles, mid, h)) {
+                right = mid; // Try smaller speed
+            } else {
+                left = mid + 1; // Increase speed
+            }
+        }
+        return left; // Minimum eating speed required
+    }
+
+    private static int getMax(int[] piles) {
+        int max = 0;
+        for (int pile : piles) max = Math.max(max, pile);
+        return max;
+    }
+
+    private static boolean canEatAll(int[] piles, int speed, int h) {
+        int totalHours = 0;
+        for (int pile : piles) {
+            totalHours += Math.ceil((double) pile / speed); // Hours needed for each pile
+        }
+        return totalHours <= h;
+    }
+
+    public static void main(String[] args) {
+        int[] piles = {3, 6, 7, 11};
+        int h = 8;
+        System.out.println("Minimum eating speed: " + minEatingSpeed(piles, h)); // Output: 4
+    }
+}
